@@ -1,0 +1,94 @@
+﻿@using EmployeeDetails.Models;
+@model EmployeeDetails.Models.EmployeeViewModel
+@{
+    ViewBag.Title = "EmployeeDetails";
+}
+
+<script src="~/Scripts/jquery-2.1.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script lang="ja" type="text/javascript">
+
+    $(function () {
+        $("#btnSubmit").click(function () {
+            if ($("#EmployeeDetailForm").valid()) {
+                PostData();
+            }
+        });
+    })
+    function PostData() {
+        var empdetails = { FirstName: $("#FirstName").val(), LastName: $("#LastName").val(), Phone: $("#Phone").val(), EmailId: $("#EmailId").val(), Gender: $("#Genders").val(), MaritalStatus: $("#MaritalStatus").val(), Address: $("#Address").val() };
+
+        $.ajax({
+            type: "POST",
+            data: JSON.stringify(empdetails),
+            url: "http://localhost:49263/api/Employee",
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                debugger;
+                window.location = '@Url.Action("ViewEmployeeDetails", "EmployeeDetails")';
+            }
+        });
+    }
+
+</script>
+
+<h2 style="text-align: center;">Employee Details</h2>
+@using (Html.BeginForm("ViewEmployeeDetails", "EmployeeDetails", FormMethod.Post, new { @id = "EmployeeDetailForm", role="form", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true);
+     <h2>Primary Form</h2>
+    <br />
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.FirstName)
+            @Html.TextBoxFor(m => m.FirstName, new { maxlength = "50" })
+            <p style="color:darkred">@Html.ValidationMessageFor(m => m.FirstName)</p>
+</div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.LastName)
+            @Html.TextBoxFor(m => m.LastName, new { maxlength = "50" })
+            <p style="color:darkred"> @Html.ValidationMessageFor(m => m.LastName)</p>
+</div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.Phone)
+            @Html.TextBoxFor(m => m.Phone, new { maxlength = "10" })
+            <p style="color:darkred">@Html.ValidationMessageFor(m => m.Phone)</p>
+</div>
+    </div>
+<br />
+    <hr />
+    <h2>Secondory Form</h2>
+    <br />
+    <div class="row">
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.EmailId)
+            @Html.TextBoxFor(m => m.EmailId, new { maxlength = "50" })
+            <p style="color:darkred">@Html.ValidationMessageFor(m => m.EmailId)</p>
+        </div>
+        <div class="col-lg-4">
+            @Html.LabelFor(m => m.Genders)
+            @Html.DropDownListFor(m => m.Genders, new List<SelectListItem>()
+{ new SelectListItem{Text="Male", Value="Male"},
+new SelectListItem{Text="Female", Value="Female"}
+})
+            <p style="color:darkred">@Html.ValidationMessageFor(m => m.Genders)</p>
+</div>
+    </div>
+    <br />
+                <div class="row">
+                    <div class="col-lg-4">
+                        @Html.RadioButtonFor(m => m.MaritalStatus, "Single") Single
+                        @Html.RadioButtonFor(m => m.MaritalStatus, "Married") Married
+                        <p style="color:darkred">@Html.ValidationMessageFor(m => m.MaritalStatus)</p>
+</div>
+                    <div class="col-lg-4">
+                        @Html.LabelFor(m => m.Address)
+                        @Html.TextAreaFor(m => m.Address, new { maxlength = "200" })
+                        <p style="color:darkred">@Html.ValidationMessageFor(m => m.Address)</p>
+</div>
+                </div>
+                <br />
+                <button type="button" id="btnSubmit">View Employee Details</button>
+}

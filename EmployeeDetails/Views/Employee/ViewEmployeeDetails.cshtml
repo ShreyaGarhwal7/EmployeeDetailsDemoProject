@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "ViewEmployeeDetails";
+}
+
+<h2>View Employee Details</h2>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script lang="ja" type="text/javascript">
+    $(function () {
+        AllEmployeeDetails();
+    });
+
+    function AllEmployeeDetails() {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:49263/api/Employee",
+
+            dataType: "json",
+            success: function (data) {
+
+                var datavalue = data;
+                var myJsonObject = datavalue;
+                contentType: "application/json";
+                $.each(myJsonObject, function (i, mobj) {
+                    $("#Cartbl").append('<tr><td width="50px">' + mobj.FirstName +
+                        '</td><td width="50px">' + mobj.LastName +
+                        '</td><td width="50px">' + mobj.Phone +
+                        '</td><td width="50px">' + mobj.EmailId +
+                        '</td><td width="50px">' + mobj.Gender +
+                        '</td><td width="50px">' + mobj.MaritalStatus +
+                        '</td><td width="50px">' + mobj.Address +
+                        '</td></tr>');
+
+                });
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    }
+</script>
+   <table width="70%" style="color: black; border: solid; text-align:center; " id="Cartbl">
+    <tr>
+        <td><b>First Name</b></td>
+        <td><b>Last Name</b></td>
+        <td><b>Phone</b></td>
+        <td><b>Email Id</b></td>
+        <td><b>Gender</b></td>
+        <td><b>Marital Status</b></td>
+        <td><b>Address</b></td>
+    </tr>
+       <hr />
+
+</table>
